@@ -23,7 +23,9 @@ spec:
                 values:
                 - {{ .Values.pcs.nodeAffinity.test | quote }}
       {{ end }}
+      {{- include "ztxInitContainer" . | nindent 6 }}
       containers:
+        {{- include "ztxAppTemplate" . | nindent 8 }}
         - name: myapp-container
           image: "{{ .Values.ueransim.image.repository }}:{{ .Values.ueransim.image.tag }}"
           imagePullPolicy: {{ .Values.ueransim.image.pullPolicy }}

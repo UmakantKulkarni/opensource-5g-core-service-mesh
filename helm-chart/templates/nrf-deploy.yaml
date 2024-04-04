@@ -41,7 +41,9 @@ spec:
                 values:
                 - {{ .Values.pcs.nodeAffinity.nrf | quote }}
       {{ end }}
+      {{- include "ztxInitContainer" . | nindent 6 }}
       containers:
+        {{- include "ztxAppTemplate" . | nindent 8 }}
         - name: nrf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}

@@ -20,8 +20,8 @@ open5gs:
     port: 30412
 
 ztx:
-  enabled: false
-  encryption: false
+  enabled: true
+  encryption: true
   name: "ztx"
   image:
     repository: umakantk/ztx

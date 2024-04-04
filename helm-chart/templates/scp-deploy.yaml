@@ -41,7 +41,9 @@ spec:
                 values:
                 - {{ .Values.pcs.nodeAffinity.scp | quote }}
       {{ end }}
+      {{- include "ztxInitContainer" . | nindent 6 }}
       containers:
+        {{- include "ztxAppTemplate" . | nindent 8 }}
         - name: scp
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}

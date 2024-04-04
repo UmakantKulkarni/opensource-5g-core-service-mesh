@@ -33,7 +33,9 @@ spec:
                 values:
                 - {{ .Values.pcs.nodeAffinity.mongo | quote }}
       {{ end }}
+      {{- include "ztxInitContainer" . | nindent 6 }}
       containers:
+        {{- include "ztxAppTemplate" . | nindent 8 }}
         - image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
           command: ["mongod", "--bind_ip_all"]
           imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
