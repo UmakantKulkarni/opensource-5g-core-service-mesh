@@ -34,16 +34,16 @@ spec:
                 - {{ .Values.pcs.nodeAffinity.mongo | quote }}
       {{ end }}
       containers:
-      - image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
-        command: ["mongod", "--bind_ip_all"]
-        imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
-        name: open5gs-mongodb
-        ports:
-        - containerPort: 27017
-          name: mongodb
-        volumeMounts:
-        - name: mongodb-persistent-storage-{{ .Release.Namespace }}
-          mountPath: /data/db_{{ .Release.Namespace }}
+        - image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
+          command: ["mongod", "--bind_ip_all"]
+          imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
+          name: open5gs-mongodb
+          ports:
+          - containerPort: 27017
+            name: mongodb
+          volumeMounts:
+          - name: mongodb-persistent-storage-{{ .Release.Namespace }}
+            mountPath: /data/db_{{ .Release.Namespace }}
       volumes:
       - name: mongodb-persistent-storage-{{ .Release.Namespace }}
         persistentVolumeClaim:

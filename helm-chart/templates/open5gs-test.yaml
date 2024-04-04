@@ -24,18 +24,18 @@ spec:
                 - {{ .Values.pcs.nodeAffinity.test | quote }}
       {{ end }}
       containers:
-      - name: myapp-container
-        image: "{{ .Values.ueransim.image.repository }}:{{ .Values.ueransim.image.tag }}"
-        imagePullPolicy: {{ .Values.ueransim.image.pullPolicy }}
-        securityContext:
-          privileged: true
-        imagePullPolicy: Always
-        command: ["/bin/sh"]
-        args: ["-c", "sleep infinity"]
-        env:
-          - name: DB_URI
-            {{ if .Values.pcs.enableMongoReplicaSet }}
-            value: {{ .Values.mongodb.rsuri.test | quote }}
-            {{ else }}
-            value: {{ .Values.mongodb.sauri.test | quote }}
-            {{ end }}
+        - name: myapp-container
+          image: "{{ .Values.ueransim.image.repository }}:{{ .Values.ueransim.image.tag }}"
+          imagePullPolicy: {{ .Values.ueransim.image.pullPolicy }}
+          securityContext:
+            privileged: true
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args: ["-c", "sleep infinity"]
+          env:
+            - name: DB_URI
+              {{ if .Values.pcs.enableMongoReplicaSet }}
+              value: {{ .Values.mongodb.rsuri.test | quote }}
+              {{ else }}
+              value: {{ .Values.mongodb.sauri.test | quote }}
+              {{ end }}
