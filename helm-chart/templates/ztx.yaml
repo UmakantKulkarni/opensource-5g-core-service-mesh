@@ -1,3 +1,35 @@
+{{- define "tcpRule" -}}
+iptables -t mangle -A PREROUTING -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0
+{{- end }}
+
+{{- define "udpRule" -}}
+iptables -t mangle -A PREROUTING -p udp ! --sport 53 -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p udp ! --dport 53 -m mark ! --mark 15 -j NFQUEUE --queue-num 0
+{{- end }}
+
+{{- define "sctpRule" -}}
+iptables -t mangle -A PREROUTING -p tcp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p tcp -m mark ! --mark 15 -j NFQUEUE --queue-num 0
+{{- end }}
+
+{{- define "combinedRule" -}}
+echo "Init Container"
+{{- end }}
+
+{{- $combinedRule := (template "combinedRule" .) }}
+
+{{- if .Values.ztx.tcp }}  
+{{- $combinedRule = printf "%s ; %s " $combinedRule (template "tcpRule" .) }}
+{{- end }}
+
+{{- if .Values.ztx.udp }}  
+{{- $combinedRule = printf "%s ; %s " $combinedRule (template "udpRule" .) }}
+{{- end }}
+
+{{- if .Values.ztx.sctp }}  
+{{- $combinedRule = printf "%s ; %s " $combinedRule (template "sctpRule" .) }}
+{{- end }}
+
+{{- $combinedRule = printf "%s ; iptables-save" $combinedRule }}
+
 {{- define "ztxInitContainer" -}}
 {{ if .Values.ztx.enabled }}
 initContainers:
@@ -9,7 +41,8 @@ initContainers:
         - NET_ADMIN
       privileged: true
     command: ['sh', '-c']
-    args: ["iptables -t mangle -A PREROUTING -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A PREROUTING -p udp ! --sport 53 -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p udp ! --dport 53 -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A PREROUTING -p tcp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p tcp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables-save"]
+    args:
+    - "{{ $combinedRule }}"
 {{ end }}
 {{- end -}}
 
@@ -25,7 +58,7 @@ initContainers:
       - NET_RAW
     privileged: true
     runAsGroup: 1592
-  command: ["/root/5gsec/src/app"]
+  command: ["/root/5gsec/src/ztx"]
   env:
   - name: ENCRYPTION_ENABLED
     value: {{ .Values.ztx.encryption | default "false" | quote }}

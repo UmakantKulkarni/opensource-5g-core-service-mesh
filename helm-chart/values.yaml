@@ -22,6 +22,9 @@ open5gs:
 ztx:
   enabled: true
   encryption: true
+  tcp: true
+  udp: true
+  sctp: true
   name: "ztx"
   image:
     repository: umakantk/ztx
