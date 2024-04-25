@@ -6,27 +6,21 @@ ENV ENV_TIMEZONE ${ARG_TIMEZONE}
 
 RUN apt -y update
 
-RUN apt-get update && apt-get -yq dist-upgrade && apt-get --no-install-recommends -qqy install wget git vim nano make g++ libsctp-dev lksctp-tools net-tools iproute2 libssl-dev tcpdump curl jq iputils-ping gdb python3-pip tzdata openssh-client 
+RUN apt-get update && apt-get -yq dist-upgrade && apt-get --no-install-recommends -qqy install wget git vim nano make g++ libsctp-dev lksctp-tools net-tools iproute2 libssl-dev tcpdump curl jq iputils-ping gdb python3-pip tzdata openssh-client cmake
 
 ENV TZ="America/Indiana/Indianapolis"
 
 RUN pip3 install pymongo
 
-RUN cd && wget https://github.com/Kitware/CMake/releases/download/v3.27.6/cmake-3.27.6.tar.gz && tar -xvzf cmake-3.27.6.tar.gz
-
-RUN cd && cd cmake-3.27.6 && ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release && make && make install
-
-RUN cd && rm -rf cmake-*
-
 RUN cmake --version
 
-ENV PCS_SETUP_TUN_INTF=true
+ENV PCS_SETUP_TUN_INTF=false
 
 RUN cd && git clone -b ztx_01 https://github.com/UmakantKulkarni/UERANSIM && cd UERANSIM && make
 
 WORKDIR /root/
 
-RUN git clone -b ztx_01 https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x *
+RUN git clone -b benchmark https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x *
 
 RUN cp UERANSIM/build/nr-* /usr/local/bin/
 
