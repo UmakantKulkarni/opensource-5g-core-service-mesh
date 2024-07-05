@@ -93,15 +93,15 @@ pcs:
     amf: amf
     smf: smf
     upf: upf
-    ausf: nf1
-    bsf: nf1
-    pcf: nf1
-    mongo: nf1
-    nrf: nf2
-    nssf: nf2
-    scp: nf2
-    udr: nf2
-    udm: nf2    
+    ausf: amf
+    bsf: amf
+    pcf: amf
+    mongo: upf
+    nrf: upf
+    nssf: upf
+    scp: smf
+    udr: smf
+    udm: smf
     test: master
     webui: master
   enableMongoReplicaSet: false
