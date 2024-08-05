@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: ztx-controller
   labels:
-    epc-mode: ztx-controller
+    app: ztx-controller
 spec:
   selector:
-    epc-mode: ztx-controller
+    app: ztx-controller
   ports:
     - protocol: TCP
       port: 15692   
