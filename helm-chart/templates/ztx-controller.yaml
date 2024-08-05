@@ -11,9 +11,11 @@ spec:
     - protocol: TCP
       port: 15692   
       targetPort: 15692
+      name: local
     - protocol: TCP
       port: 61592   
       targetPort: 61592
+      name: external
 ---  
 apiVersion: apps/v1
 kind: Deployment
@@ -43,7 +45,7 @@ spec:
       {{- include "ztxInitContainer" . | nindent 6 }}
       containers:
         - name: ztx-controller
-          image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.initTag }}"
+          image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.tag }}"
           imagePullPolicy: {{ .Values.ztx.image.pullPolicy }}
           securityContext:
             capabilities:
