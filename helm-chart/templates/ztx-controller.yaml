@@ -42,7 +42,6 @@ spec:
                 values:
                 - {{ .Values.pcs.nodeAffinity.ztx | quote }}
       {{ end }}
-      {{- include "ztxInitContainer" . | nindent 6 }}
       containers:
         - name: ztx-controller
           image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.tag }}"
