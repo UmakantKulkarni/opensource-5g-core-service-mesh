@@ -21,6 +21,7 @@ open5gs:
 
 ztx:
   enabled: true
+  authentication: true
   encryption: true
   tcp: true
   udp: true
@@ -104,6 +105,7 @@ pcs:
     udm: smf
     test: master
     webui: master
+    ztx: master
   enableMongoReplicaSet: false
   dbCommEnabled:
     amf: false

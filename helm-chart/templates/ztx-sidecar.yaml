@@ -1,5 +1,5 @@
 {{- define "tcpRule" -}}
-iptables -t mangle -A PREROUTING -p tcp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p tcp -m mark ! --mark 15 -j NFQUEUE --queue-num 0
+iptables -t mangle -A PREROUTING -p tcp -m mark ! --mark 15 -m multiport ! --sports 15692,61592 -m multiport ! --dports 15692,61592 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p tcp -m mark ! --mark 15 -m multiport ! --sports 15692,61592 -m multiport ! --dports 15692,61592 -j NFQUEUE --queue-num 0
 {{- end }}
 
 {{- define "udpRule" -}}
