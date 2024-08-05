@@ -30,7 +30,7 @@ ztx:
   image:
     repository: umakantk/ztx
     pullPolicy: Always
-    tag: "v1"
+    tag: "devel"
     initTag: "init"
 
 pool:
