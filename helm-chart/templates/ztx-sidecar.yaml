@@ -55,7 +55,7 @@ initContainers:
       - NET_RAW
     privileged: true
     runAsGroup: 1592
-  command: ["/root/5gsec/src/ztx"]
+  command: ["/root/5gsec/build/src/ztx"]
   env:
   - name: ENCRYPTION_ENABLED
     value: {{ .Values.ztx.encryption | default "false" | quote }}
