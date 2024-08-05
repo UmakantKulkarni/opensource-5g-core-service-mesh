@@ -56,9 +56,15 @@ spec:
           env:
             - name: ENCRYPTION_ENABLED
               value: {{ .Values.ztx.encryption | default "false" | quote }}
+            - name: ZTX_CONTROLLER
+              value: "true"
             - name: AUTHENTICATION_ENABLED
               value: {{ .Values.ztx.authentication | default "false" | quote }}
             - name: MY_IP
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: MY_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
