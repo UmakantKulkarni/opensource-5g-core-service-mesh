@@ -51,9 +51,8 @@ spec:
               add:
               - NET_ADMIN
               - NET_RAW
-            privileged: true
-            runAsGroup: 1592
-          command: ["/root/5gsec/build/src/ztx"]
+            allowPrivilegeEscalation: false
+          command: ["/tmp/5gsec/build/src/ztx"]
           env:
             - name: ENCRYPTION_ENABLED
               value: {{ .Values.ztx.encryption | default "false" | quote }}
