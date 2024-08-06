@@ -52,6 +52,7 @@ initContainers:
       add:
       - NET_ADMIN
       - NET_RAW
+    privileged: false
     allowPrivilegeEscalation: false
   command: ["/tmp/5gsec/build/src/ztx"]
   env:
