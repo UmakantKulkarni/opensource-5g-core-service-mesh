@@ -43,6 +43,7 @@ spec:
       {{ end }}
       hostNetwork: {{ .Values.open5gs.upf.hostNetwork }}
       {{- include "ztxInitContainer" . | nindent 6 }}
+      serviceAccountName: open5gs
       containers:
         {{- include "ztxAppTemplate" . | nindent 8 }}
         - name: upf

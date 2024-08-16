@@ -34,6 +34,7 @@ spec:
                 - {{ .Values.pcs.nodeAffinity.mongo | quote }}
       {{ end }}
       {{- include "ztxInitContainer" . | nindent 6 }}
+      serviceAccountName: open5gs
       containers:
         {{- include "ztxAppTemplate" . | nindent 8 }}
         - image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"

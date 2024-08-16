@@ -85,6 +85,7 @@ spec:
                 values:
                 - {{ .Values.pcs.nodeAffinity.webui | quote }}
       {{ end }}
+      serviceAccountName: open5gs
       containers:
       - name: webui
         imagePullPolicy: {{ .Values.webui.image.pullPolicy }}
