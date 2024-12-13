@@ -13,7 +13,7 @@ data:
       - job_name: open5gs-mongodb-metrics
         static_configs:
           - targets:
-              - "open5gs-mongodb-metrics.{{ .Release.Namespace }}.svc.cluster.local:9216"
+              - "open5gs-mongodb-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
 
     scrape_configs:
       - job_name: open5gs-amf-metrics
