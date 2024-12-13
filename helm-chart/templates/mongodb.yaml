@@ -15,7 +15,8 @@ metadata:
   name: open5gs-mongodb-metrics
 spec:
   ports:
-    - port: 9090
+    - protocol: TCP
+      port: 9090
       targetPort: 9090
   selector:
     app: open5gs-mongodb
@@ -64,6 +65,10 @@ spec:
           image: percona/mongodb_exporter:0.43.0
           args:
             - "--mongodb.uri=mongodb://127.0.0.1:27017"
+            - "--log.level=info"
+            - "--collect-all"
+            - "--web.listen-address=:9090"
+            - "--mongodb.global-conn-pool"
           ports:
             - containerPort: 9090
               name: metrics
