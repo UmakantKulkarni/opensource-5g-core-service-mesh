@@ -1,8 +1,8 @@
 FROM ubuntu:22.04
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 ARG ARG_TIMEZONE=America/Indiana/Indianapolis
-ENV ENV_TIMEZONE ${ARG_TIMEZONE}
+ENV ENV_TIMEZONE=${ARG_TIMEZONE}
 
 RUN apt-get update && \
    apt-get -yq dist-upgrade && \

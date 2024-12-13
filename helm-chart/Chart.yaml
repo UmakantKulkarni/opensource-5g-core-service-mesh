@@ -1,4 +1,4 @@
-apiVersion: v2
+apiVersion: v3
 name: open5gs-5gcore-helm
 description: A Helm chart for open5gs 5G Core
 

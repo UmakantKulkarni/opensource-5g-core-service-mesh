@@ -27,7 +27,7 @@ spec:
       serviceAccountName: open5gs
       containers:
         {{- include "ztxAppTemplate" . | nindent 8 }}
-        - name: myapp-container
+        - name: test
           image: "{{ .Values.ueransim.image.repository }}:{{ .Values.ueransim.image.tag }}"
           imagePullPolicy: {{ .Values.ueransim.image.pullPolicy }}
           securityContext:
@@ -38,7 +38,7 @@ spec:
           env:
             - name: DB_URI
               {{ if .Values.pcs.enableMongoReplicaSet }}
-              value: {{ .Values.mongodb.rsuri.test | quote }}
+              value: {{ .Values.mongodb.testrsuri | quote }}
               {{ else }}
-              value: {{ .Values.mongodb.sauri.test | quote }}
+              value: {{ .Values.mongodb.testsauri | quote }}
               {{ end }}

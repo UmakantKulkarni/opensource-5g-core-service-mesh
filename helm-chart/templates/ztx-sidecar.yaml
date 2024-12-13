@@ -36,8 +36,24 @@ initContainers:
       capabilities:
         add:
         - NET_ADMIN
+    env:
+    - name: HEALTH_SERVER_PORT
+      value: {{ .Values.ztx.health.port }}
     command: ['sh', '-c']
     args:
+    - |
+      echo "Waiting for ztx-controller health server to return HTTP 200"
+      while true; do
+        HTTP_STATUS=$(wget --server-response --spider http://ztx-controller:{{ .Values.ztx.health.port }} 2>&1 | awk '/^  HTTP/{print $2}')
+        if [ "$HTTP_STATUS" -eq 200 ]; then
+          echo "ztx-controller health server returned HTTP 200. Proceeding with startup"
+          break
+        else
+          echo "ztx-controller health server returned HTTP $HTTP_STATUS. Retrying in 5 seconds"
+          sleep 5
+        fi
+      done
+
     - "{{ $iptableRule }}"
 {{ end }}
 {{- end -}}

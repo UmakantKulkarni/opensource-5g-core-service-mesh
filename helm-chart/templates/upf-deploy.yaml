@@ -11,7 +11,21 @@ spec:
     - protocol: UDP
       port: 8805
       targetPort: {{ .Values.open5gs.pfcp.port | default 8805 }}
----  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-upf-metrics
+  labels:
+    epc-mode: upf
+spec:
+  selector:
+    epc-mode: upf
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
@@ -70,9 +84,9 @@ spec:
             value: {{ .Values.pcs.enableSingleRead.upf | default "false" | quote }}
           - name: DB_URI
             {{ if .Values.pcs.enableMongoReplicaSet }}
-            value: {{ .Values.mongodb.rsuri.upf | quote }}
+            value: {{ .Values.mongodb.rsuri | quote }}
             {{ else }}
-            value: {{ .Values.mongodb.sauri.upf | quote }}
+            value: {{ .Values.mongodb.sauri | quote }}
             {{ end }}
           - name: OGS_PFCP_UDP_PORT
             value: {{ .Values.open5gs.pfcp.port | default "8805" | quote }}

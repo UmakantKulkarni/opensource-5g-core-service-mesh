@@ -1,0 +1,126 @@
+{{- if .Values.monitoring.prometheus.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: {{ .Release.Namespace }}
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 10s
+
+    scrape_configs:
+      - job_name: open5gs-mongodb-metrics
+        static_configs:
+          - targets:
+              - "open5gs-mongodb-metrics.{{ .Release.Namespace }}.svc.cluster.local:9216"
+
+    scrape_configs:
+      - job_name: open5gs-amf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-amf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+    
+    scrape_configs:
+      - job_name: open5gs-ausf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-ausf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+
+    scrape_configs:
+      - job_name: open5gs-bsf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-bsf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+    
+    scrape_configs:
+      - job_name: open5gs-nrf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-nrf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+
+    scrape_configs:
+      - job_name: open5gs-nssf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-nssf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+    
+    scrape_configs:
+      - job_name: open5gs-pcf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-pcf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+
+    scrape_configs:
+      - job_name: open5gs-scp-metrics
+        static_configs:
+          - targets:
+              - "open5gs-scp-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+    
+    scrape_configs:
+      - job_name: open5gs-smf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-smf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+
+    scrape_configs:
+      - job_name: open5gs-udm-metrics
+        static_configs:
+          - targets:
+              - "open5gs-udm-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+
+    scrape_configs:
+      - job_name: open5gs-udr-metrics
+        static_configs:
+          - targets:
+              - "open5gs-udr-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+    
+    scrape_configs:
+      - job_name: open5gs-upf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-upf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:latest
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: prometheus-config
+              mountPath: /etc/prometheus/
+      volumes:
+        - name: prometheus-config
+          configMap:
+            name: prometheus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: LoadBalancer
+  selector:
+    app: prometheus
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+      nodePort:  {{ .Values.monitoring.prometheus.nodeport | default 30090 }}
+{{- end }}

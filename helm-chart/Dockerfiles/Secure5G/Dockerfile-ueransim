@@ -1,8 +1,8 @@
 FROM ubuntu:22.04
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 ARG ARG_TIMEZONE=America/Indiana/Indianapolis
-ENV ENV_TIMEZONE ${ARG_TIMEZONE}
+ENV ENV_TIMEZONE=${ARG_TIMEZONE}
 
 RUN apt -y update
 
@@ -18,9 +18,17 @@ ENV PCS_SETUP_TUN_INTF=false
 
 RUN cd && git clone -b ztx_01 https://github.com/UmakantKulkarni/UERANSIM && cd UERANSIM && make
 
+# Define the Go version to install
+ENV GO_VERSION=1.23.4
+RUN cd && wget https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && rm go${GO_VERSION}.linux-amd64.tar.gz
+ENV PATH="/usr/local/go/bin:$PATH"
+RUN go version
+RUN cd && git clone https://github.com/UmakantKulkarni/gnbsim && cd gnbsim && go build
+RUN cd
+
 WORKDIR /root/
 
-RUN git clone -b benchmark https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x *
+RUN git clone -b ztx_cl https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x *
 
 RUN cp UERANSIM/build/nr-* /usr/local/bin/
 

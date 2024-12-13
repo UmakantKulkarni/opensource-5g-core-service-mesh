@@ -5,7 +5,18 @@ metadata:
   name: mongodb-svc
 spec:
   ports:
-  - port: 27017
+    - port: 27017
+  selector:
+    app: open5gs-mongodb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-mongodb-metrics
+spec:
+  ports:
+    - port: 9216
+      targetPort: 9216
   selector:
     app: open5gs-mongodb
 ---
@@ -42,15 +53,32 @@ spec:
           imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
           name: open5gs-mongodb
           ports:
-          - containerPort: 27017
-            name: mongodb
+            - containerPort: 27017
+              name: mongodb
           volumeMounts:
-          - name: mongodb-persistent-storage-{{ .Release.Namespace }}
-            mountPath: /data/db_{{ .Release.Namespace }}
+            - name: mongodb-persistent-storage-{{ .Release.Namespace }}
+              mountPath: /data/db_{{ .Release.Namespace }}
+        
+        # MongoDB Exporter Sidecar
+        - name: mongodb-exporter
+          image: percona/mongodb_exporter:0.43.0
+          args:
+            - "--mongodb.uri=mongodb://127.0.0.1:27017"
+          ports:
+            - containerPort: 9216
+              name: metrics
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+
       volumes:
-      - name: mongodb-persistent-storage-{{ .Release.Namespace }}
-        persistentVolumeClaim:
-          claimName: mongodb-pv-claim-{{ .Release.Namespace }}
+        - name: mongodb-persistent-storage-{{ .Release.Namespace }}
+          persistentVolumeClaim:
+            claimName: mongodb-pv-claim-{{ .Release.Namespace }}
 ---
 kind: PersistentVolume
 apiVersion: v1

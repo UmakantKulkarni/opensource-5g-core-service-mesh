@@ -6,7 +6,7 @@ metadata:
     epc-mode: udr
 data:
   udr.yaml: |
-    db_uri: {{ .Values.mongodb.sauri.udr | quote }}
+    db_uri: {{ .Values.mongodb.sauri | quote }}
     logger:
       file: /var/log/open5gs/udr.log
     #  level: info   # fatal|error|warn|info(default)|debug|trace
@@ -29,3 +29,7 @@ data:
     #        - uri: http://open5gs-nrf:80
           scp:
             - uri: http://open5gs-scp:80
+      metrics:
+        server:
+          - address: 0.0.0.0
+            port: 9090

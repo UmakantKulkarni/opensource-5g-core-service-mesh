@@ -31,10 +31,10 @@ data:
       ngap:
         server:
           - dev: {{ .Values.k8s.podInterface }}
-      # metrics:
-      #   server:
-      #     - address: 0.0.0.0
-      #       port: 9090
+      metrics:
+        server:
+          - address: 0.0.0.0
+            port: 9090
       guami:
         - plmn_id:
             mcc: {{ .Values.amf.mcc }}

@@ -1,21 +1,11 @@
-FROM mongo:4-focal
+FROM mongo:8.0
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 ARG ARG_TIMEZONE=America/Indiana/Indianapolis
-ENV ENV_TIMEZONE ${ARG_TIMEZONE}
-
-RUN apt -y update
-
-RUN apt -y install git vim python3-pip tzdata
-
+ENV ENV_TIMEZONE=${ARG_TIMEZONE}
 ENV TZ="America/Indiana/Indianapolis"
 
-RUN pip3 install pymongo
-
 WORKDIR /root/
-
-RUN git clone -b ztx_01 https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x *
-
 RUN sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf.orig
 
 # sync timezone

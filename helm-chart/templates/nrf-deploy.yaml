@@ -11,7 +11,21 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
----    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-nrf-metrics
+  labels:
+    epc-mode: nrf
+spec:
+  selector:
+    epc-mode: nrf
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
@@ -52,9 +66,9 @@ spec:
           env:
           - name: DB_URI
             {{ if .Values.pcs.enableMongoReplicaSet }}
-            value: {{ .Values.mongodb.rsuri.nrf | quote }}
+            value: {{ .Values.mongodb.rsuri | quote }}
             {{ else }}
-            value: {{ .Values.mongodb.sauri.nrf | quote }}
+            value: {{ .Values.mongodb.sauri | quote }}
             {{ end }}
           volumeMounts:
             - name: open5gs-nrf-config

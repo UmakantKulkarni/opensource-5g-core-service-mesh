@@ -41,10 +41,10 @@ data:
       gtpu:
         server:
           - dev: {{ .Values.k8s.podInterface }}
-      # metrics:
-      #   server:
-      #     - address: 0.0.0.0
-      #       port: 9090
+      metrics:
+        server:
+          - address: 0.0.0.0
+            port: 9090
       session:
         - subnet: 10.45.0.1/16
         - subnet: 2001:db8:cafe::1/48

@@ -1,7 +1,3 @@
-# Default values for open5gs-epc-helm.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 open5gs:
   image:
     repository: umakantk/open5gs
@@ -30,8 +26,15 @@ ztx:
   image:
     repository: umakantk/ztx
     pullPolicy: Always
-    tag: "devel"
+    tag: "v2"
     initTag: "init"
+  health:
+    port: 8080
+
+monitoring:
+  prometheus:
+    enabled: true
+    nodeport: 30090
 
 pool:
   key: 128
@@ -64,29 +67,10 @@ webui:
     tag: "v2.2.2"
   ingress:
     enabled: false
-    ## Ingress annotations done as key:value pairs
-    ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-    ##
-    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: true will automatically be set
-    # annotations:
-    #   kubernetes.io/ingress.class: nginx
-
     hosts:
       - name: open5gs-epc.local
         paths: ["/"]
-        ## Set this to true in order to enable TLS on the ingress record
         tls: false
-
-        ## Optionally specify the TLS hosts for the ingress record
-        ## Useful when the Ingress controller supports www-redirection
-        ## If not specified, the above host name will be used
-        # tlsHosts:
-        # - www.open5gs-epc.local
-        # - open5gs-epc.local
-
-        ## If TLS is set to true, you can declare what secret will store the key/certificate for TLS
-        # tlsSecret: open5gs-epc.local-tls
 
 pcs:
   nodeAffinity:
@@ -159,39 +143,12 @@ pcs:
     smf: false
     upf: false
 
-
-
 mongodb:
   image:
     repository: umakantk/open5gs-mongo
     pullPolicy: IfNotPresent
-    tag: "ztx_01"
-  sauri:
-    ausf: "mongodb://mongodb-svc/open5gs"
-    nssf: "mongodb://mongodb-svc/open5gs"
-    udm: "mongodb://mongodb-svc/open5gs"
-    test: "mongodb://mongodb-svc/"
-    bsf: "mongodb://mongodb-svc/open5gs"
-    nrf: "mongodb://mongodb-svc/open5gs"
-    scp: "mongodb://mongodb-svc/open5gs"
-    pcf: "mongodb://mongodb-svc/open5gs"
-    udr: "mongodb://mongodb-svc/open5gs"
-    webui: "mongodb://mongodb-svc/open5gs"
-    amf: "mongodb://mongodb-svc:27017/?waitQueueTimeoutMS=1000"
-    smf: "mongodb://mongodb-svc:27017/?waitQueueTimeoutMS=1000"
-    upf: "mongodb://mongodb-svc:27017/?waitQueueTimeoutMS=1000"
-  rsuri:
-    ausf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    nssf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    udm: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    test: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
-    bsf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    nrf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    scp: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    pcf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    udr: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    webui: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    amf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
-    smf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
-    upf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
-
+    tag: "ztx_02"
+  sauri: "mongodb://mongodb-svc/open5gs"
+  testsauri: "mongodb://mongodb-svc/"
+  rsuri: "mongodb://mongodb-svc/open5gs"
+  testsrsuri: "mongodb://mongodb-svc/"

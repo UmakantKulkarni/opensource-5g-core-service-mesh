@@ -26,3 +26,7 @@ data:
             port: 80
             advertise: open5gs-nrf
             no_tls: true
+      metrics:
+        server:
+          - address: 0.0.0.0
+            port: 9090

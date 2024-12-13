@@ -32,3 +32,7 @@ data:
             - uri: http://open5gs-nrf:80
               s_nssai:
                 sst: 1
+      metrics:
+        server:
+          - address: 0.0.0.0
+            port: 9090

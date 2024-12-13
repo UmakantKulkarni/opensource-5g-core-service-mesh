@@ -16,6 +16,10 @@ spec:
       port: 61592   
       targetPort: 61592
       name: external
+    - protocol: TCP
+      port: {{ .Values.ztx.health.port }}
+      targetPort: {{ .Values.ztx.health.port }}
+      name: health
 ---  
 apiVersion: apps/v1
 kind: Deployment
@@ -62,6 +66,8 @@ spec:
               value: "true"
             - name: AUTHENTICATION_ENABLED
               value: {{ .Values.ztx.authentication | default "false" | quote }}
+            - name: HEALTH_SERVER_PORT
+              value: {{ .Values.ztx.health.port }}
             - name: MY_IP
               valueFrom:
                 fieldRef:
