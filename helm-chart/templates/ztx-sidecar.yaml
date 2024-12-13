@@ -76,6 +76,8 @@ initContainers:
   env:
   - name: ENCRYPTION_ENABLED
     value: {{ .Values.ztx.encryption | default "false" | quote }}
+  - name: HEALTH_SERVER_PORT
+    value: {{ .Values.ztx.health.port | quote }}
   - name: MY_IP
     valueFrom:
       fieldRef:
