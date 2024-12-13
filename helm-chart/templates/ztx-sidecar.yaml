@@ -43,8 +43,10 @@ initContainers:
     args:
     - |
       echo "Waiting for ztx-controller health server to return HTTP 200"
+      HEALTHURI="http://ztx-controller:{{ .Values.ztx.health.port }}"
+      echo "Health server URI: $HEALTHURI"
       while true; do
-        HTTP_STATUS=$(wget --server-response --spider http://ztx-controller:{{ .Values.ztx.health.port }} 2>&1 | awk '/^  HTTP/{print $2}')
+        HTTP_STATUS=$(wget --server-response --spider $HEALTHURI 2>&1 | awk '/^  HTTP/{print $2}')
         if [ "$HTTP_STATUS" -eq 200 ]; then
           echo "ztx-controller health server returned HTTP 200. Proceeding with startup"
           break

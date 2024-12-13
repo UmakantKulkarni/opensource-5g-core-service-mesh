@@ -14,68 +14,46 @@ data:
         static_configs:
           - targets:
               - "open5gs-mongodb-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-
-    scrape_configs:
       - job_name: open5gs-amf-metrics
         static_configs:
           - targets:
               - "open5gs-amf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-    
-    scrape_configs:
       - job_name: open5gs-ausf-metrics
         static_configs:
           - targets:
               - "open5gs-ausf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-
-    scrape_configs:
       - job_name: open5gs-bsf-metrics
         static_configs:
           - targets:
               - "open5gs-bsf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-    
-    scrape_configs:
       - job_name: open5gs-nrf-metrics
         static_configs:
           - targets:
               - "open5gs-nrf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-
-    scrape_configs:
       - job_name: open5gs-nssf-metrics
         static_configs:
           - targets:
               - "open5gs-nssf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-    
-    scrape_configs:
       - job_name: open5gs-pcf-metrics
         static_configs:
           - targets:
               - "open5gs-pcf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-
-    scrape_configs:
       - job_name: open5gs-scp-metrics
         static_configs:
           - targets:
               - "open5gs-scp-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-    
-    scrape_configs:
       - job_name: open5gs-smf-metrics
         static_configs:
           - targets:
               - "open5gs-smf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-
-    scrape_configs:
       - job_name: open5gs-udm-metrics
         static_configs:
           - targets:
               - "open5gs-udm-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-
-    scrape_configs:
       - job_name: open5gs-udr-metrics
         static_configs:
           - targets:
               - "open5gs-udr-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-    
-    scrape_configs:
       - job_name: open5gs-upf-metrics
         static_configs:
           - targets:
