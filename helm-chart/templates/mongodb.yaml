@@ -58,7 +58,7 @@ spec:
       containers:
         {{- include "ztxAppTemplate" . | nindent 8 }}
         - image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
-          command: ["mongod", "--bind_ip_all", "--auth"]
+          command: ["mongod", "--bind_ip_all"]
           imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
           name: open5gs-mongodb
           ports:
