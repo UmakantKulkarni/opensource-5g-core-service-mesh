@@ -62,8 +62,8 @@ spec:
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
           command: [ "bash", "-c" ]
           args:
-            - {{ include "wait-for-paas" . | indent 14 }}
-            - open5gs-pcfd -c /open5gs/config-map/pcf.yaml
+          - {{ include "wait-for-paas" . | indent 12 }}
+            open5gs-pcfd -c /open5gs/config-map/pcf.yaml;
           env:
           - name: DB_URI
             value: {{ include "mongodbUri" . | quote }}
