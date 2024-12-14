@@ -1,3 +1,11 @@
+{{- define "mongodbUri" -}}
+{{- if .Values.pcs.enableMongoReplicaSet }}
+mongodb://{{ .Values.mongodb.username }}:{{ .Values.mongodb.password }}@mongodb-svc/open5gs
+{{- else }}
+mongodb://{{ .Values.mongodb.username }}:{{ .Values.mongodb.password }}@mongodb-svc/open5gs
+{{- end }}
+{{- end }}
+
 {{- if not .Values.pcs.enableMongoReplicaSet }}
 apiVersion: v1
 kind: Service
@@ -56,6 +64,11 @@ spec:
           ports:
             - containerPort: 27017
               name: mongodb
+          env:
+          - name: MONGODB_INITDB_ROOT_USERNAME
+            value: {{ .Values.mongodb.username | default "root" | quote }}
+          - name: MONGODB_INITDB_ROOT_PASSWORD
+            value: {{ .Values.mongodb.username | default "root" | quote }}
           volumeMounts:
             - name: mongodb-persistent-storage-{{ .Release.Namespace }}
               mountPath: /data/db_{{ .Release.Namespace }}
@@ -64,7 +77,7 @@ spec:
         - name: mongodb-exporter
           image: percona/mongodb_exporter:0.43.0
           args:
-            - "--mongodb.uri=mongodb://127.0.0.1:27017"
+            - "--mongodb.uri=mongodb://{{ .Values.mongodb.username }}:{{ .Values.mongodb.password }}@127.0.0.1:27017"
             - "--log.level=info"
             - "--collect-all"
             - "--web.listen-address=:9090"

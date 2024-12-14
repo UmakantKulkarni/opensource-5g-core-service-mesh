@@ -144,11 +144,9 @@ pcs:
     upf: false
 
 mongodb:
+  username: root
+  password: root
   image:
     repository: umakantk/open5gs-mongo
     pullPolicy: IfNotPresent
     tag: "ztx_02"
-  sauri: "mongodb://mongodb-svc/open5gs"
-  testsauri: "mongodb://mongodb-svc/"
-  rsuri: "mongodb://mongodb-svc/open5gs"
-  testsrsuri: "mongodb://mongodb-svc/"

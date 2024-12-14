@@ -92,11 +92,7 @@ spec:
         image: "{{ .Values.webui.image.repository }}:{{ .Values.webui.image.tag }}"
         env:
         - name: DB_URI
-          {{ if .Values.pcs.enableMongoReplicaSet }}
-          value: {{ .Values.mongodb.rsuri | quote }}
-          {{ else }}
-          value: {{ .Values.mongodb.sauri | quote }}
-          {{ end }}
+          value: {{ template "mongodbUri" . | quote }}
         - name: NODE_ENV
           value: "production"
         - name: HOSTNAME

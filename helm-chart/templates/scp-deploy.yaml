@@ -65,11 +65,7 @@ spec:
           command: ["open5gs-scpd", "-c", "/open5gs/config-map/scp.yaml"]
           env:
           - name: DB_URI
-            {{ if .Values.pcs.enableMongoReplicaSet }}
-            value: {{ .Values.mongodb.rsuri | quote }}
-            {{ else }}
-            value: {{ .Values.mongodb.sauri | quote }}
-            {{ end }}
+            value: {{ template "mongodbUri" . | quote }}
           volumeMounts:
             - name: open5gs-scp-config
               mountPath: /open5gs/config-map/scp.yaml

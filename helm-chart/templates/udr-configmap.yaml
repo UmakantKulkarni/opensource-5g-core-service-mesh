@@ -6,7 +6,7 @@ metadata:
     epc-mode: udr
 data:
   udr.yaml: |
-    db_uri: {{ .Values.mongodb.sauri | quote }}
+    db_uri: {{ template "mongodbUri" . | quote }}
     logger:
       file: /var/log/open5gs/udr.log
     #  level: info   # fatal|error|warn|info(default)|debug|trace
