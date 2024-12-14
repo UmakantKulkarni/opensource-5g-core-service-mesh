@@ -42,9 +42,9 @@ spec:
           imagePullPolicy: Always
           command: [ "bash", "-c" ]
           args:
-            - |
-              {{ include "wait-for-paas" . }}
-              sleep infinity
+          - |
+            {{ include "wait-for-paas" . }}
+            sleep infinity
           env:
             - name: DB_URI
               {{ if .Values.pcs.enableMongoReplicaSet }}
