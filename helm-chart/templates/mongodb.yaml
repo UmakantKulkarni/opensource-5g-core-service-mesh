@@ -1,8 +1,8 @@
 {{- define "mongodbUri" -}}
 {{- if .Values.pcs.enableMongoReplicaSet -}}
-mongodb://{{ .Values.mongodb.username }}:{{ .Values.mongodb.password }}@mongodb-svc/open5gs
+mongodb://mongodb-svc/open5gs
 {{- else -}}
-mongodb://{{ .Values.mongodb.username }}:{{ .Values.mongodb.password }}@mongodb-svc/open5gs
+mongodb://mongodb-svc/open5gs
 {{- end -}}
 {{- end -}}
 
@@ -28,20 +28,6 @@ spec:
       targetPort: 9090
   selector:
     app: open5gs-mongodb
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mongodb-init-script
-data:
-  init.js: |
-    db.createUser({
-      user: {{ .Values.mongodb.username | quote }},
-      pwd: {{ .Values.mongodb.password | quote }},
-      roles: [
-        { role: {{ .Values.mongodb.username | quote }}, db: "admin" }
-      ]
-    });
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -86,15 +72,12 @@ spec:
           volumeMounts:
             - name: mongodb-persistent-storage-{{ .Release.Namespace }}
               mountPath: /data/db_{{ .Release.Namespace }}
-            - name: mongodb-init-script-{{ .Release.Namespace }}
-              mountPath: /docker-entrypoint-initdb.d/init.js
-              subPath: init.js
         
         # MongoDB Exporter Sidecar
         - name: mongodb-exporter
           image: percona/mongodb_exporter:0.43.0
           args:
-            - "--mongodb.uri=mongodb://{{ .Values.mongodb.username }}:{{ .Values.mongodb.password }}@127.0.0.1:27017"
+            - "--mongodb.uri=mongodb://127.0.0.1:27017"
             - "--log.level=info"
             - "--collect-all"
             - "--web.listen-address=:9090"
@@ -114,9 +97,6 @@ spec:
         - name: mongodb-persistent-storage-{{ .Release.Namespace }}
           persistentVolumeClaim:
             claimName: mongodb-pv-claim-{{ .Release.Namespace }}
-        - name: mongodb-init-script-{{ .Release.Namespace }}
-          configMap:
-            name: mongodb-init-script
 ---
 kind: PersistentVolume
 apiVersion: v1

@@ -38,7 +38,7 @@ spec:
           env:
             - name: DB_URI
               {{ if .Values.pcs.enableMongoReplicaSet }}
-              value: "mongodb://{{ .Values.mongodb.username }}:{{ .Values.mongodb.password }}@mongodb-svc/"
+              value: "mongodb://mongodb-svc/"
               {{ else }}
-              value: "mongodb://{{ .Values.mongodb.username }}:{{ .Values.mongodb.password }}@mongodb-svc/"
+              value: "mongodb://mongodb-svc/"
               {{ end }}
