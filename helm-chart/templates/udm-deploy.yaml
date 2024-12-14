@@ -63,7 +63,7 @@ spec:
           command: ["open5gs-udmd", "-c", "/open5gs/config-map/udm.yaml"]
           env:
           - name: DB_URI
-            value: {{- include "mongodbUri" . | quote -}}
+            value: {{ include "mongodbUri" . | quote }}
           volumeMounts:
           - name: open5gs-udm-config
             mountPath: /open5gs/config-map/udm.yaml

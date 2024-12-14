@@ -105,7 +105,7 @@ spec:
           - name: PCS_ENABLE_SINGLE_READ
             value: {{ .Values.pcs.enableSingleRead.amf | default "false" | quote }}
           - name: DB_URI
-            value: {{- include "mongodbUri" . | quote -}}
+            value: {{ include "mongodbUri" . | quote }}
           volumeMounts:
           - name: open5gs-amf-config
             mountPath: /open5gs/config-map/amf.yaml

@@ -63,7 +63,7 @@ spec:
           command: ["open5gs-bsfd", "-c", "/open5gs/config-map/bsf.yaml"]
           env:
           - name: DB_URI
-            value: {{- include "mongodbUri" . | quote -}}
+            value: {{ include "mongodbUri" . | quote }}
           volumeMounts:
           - name: open5gs-bsf-config
             mountPath: /open5gs/config-map/bsf.yaml

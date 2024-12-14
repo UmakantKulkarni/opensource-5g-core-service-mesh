@@ -65,7 +65,7 @@ spec:
           command: ["open5gs-scpd", "-c", "/open5gs/config-map/scp.yaml"]
           env:
           - name: DB_URI
-            value: {{- include "mongodbUri" . | quote -}}
+            value: {{ include "mongodbUri" . | quote }}
           volumeMounts:
             - name: open5gs-scp-config
               mountPath: /open5gs/config-map/scp.yaml

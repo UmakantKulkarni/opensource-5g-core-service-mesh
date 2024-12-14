@@ -94,7 +94,7 @@ spec:
             - name: PCS_ENABLE_SINGLE_READ
               value: {{ .Values.pcs.enableSingleRead.smf | default "false" | quote }}
             - name: DB_URI
-              value: {{- include "mongodbUri" . | quote -}}
+              value: {{ include "mongodbUri" . | quote }}
             - name: OGS_PFCP_UDP_PORT
               value: {{ .Values.open5gs.pfcp.port | default "8805" | quote }}
             - name: OGS_TUN_INTERFACE
