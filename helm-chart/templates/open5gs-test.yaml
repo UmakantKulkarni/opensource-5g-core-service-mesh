@@ -41,9 +41,8 @@ spec:
             privileged: true
           command: [ "bash", "-c" ]
           args:
-            - |
-              {{ include "wait-for-paas" . }}
-              sleep infinity
+            - {{ include "wait-for-paas" . | indent 14 }}
+            - sleep infinity
           env:
             - name: DB_URI
               {{ if .Values.pcs.enableMongoReplicaSet }}
