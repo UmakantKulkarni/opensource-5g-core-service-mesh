@@ -29,6 +29,20 @@ spec:
   selector:
     app: open5gs-mongodb
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-init-script
+data:
+  init.js: |
+    db.createUser({
+      user: {{ .Values.mongodb.username | quote }},
+      pwd: {{ .Values.mongodb.password | quote }},
+      roles: [
+        { role: {{ .Values.mongodb.username | quote }}, db: "admin" }
+      ]
+    });
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -58,20 +72,23 @@ spec:
       containers:
         {{- include "ztxAppTemplate" . | nindent 8 }}
         - image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
-          command: ["mongod", "--bind_ip_all"]
+          command: ["mongod", "--bind_ip_all", "--auth"]
           imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
           name: open5gs-mongodb
           ports:
             - containerPort: 27017
               name: mongodb
           env:
-          - name: MONGODB_INITDB_ROOT_USERNAME
+          - name: MONGO_INITDB_ROOT_USERNAME
             value: {{ .Values.mongodb.username | default "root" | quote }}
-          - name: MONGODB_INITDB_ROOT_PASSWORD
+          - name: MONGO_INITDB_ROOT_PASSWORD
             value: {{ .Values.mongodb.username | default "root" | quote }}
           volumeMounts:
             - name: mongodb-persistent-storage-{{ .Release.Namespace }}
               mountPath: /data/db_{{ .Release.Namespace }}
+            - name: mongodb-init-script-{{ .Release.Namespace }}
+              mountPath: /docker-entrypoint-initdb.d/init.js
+              subPath: init.js
         
         # MongoDB Exporter Sidecar
         - name: mongodb-exporter
@@ -97,6 +114,9 @@ spec:
         - name: mongodb-persistent-storage-{{ .Release.Namespace }}
           persistentVolumeClaim:
             claimName: mongodb-pv-claim-{{ .Release.Namespace }}
+        - name: mongodb-init-script-{{ .Release.Namespace }}
+          configMap:
+            name: mongodb-init-script
 ---
 kind: PersistentVolume
 apiVersion: v1

@@ -8,7 +8,8 @@ data:
   pcf.yaml: |
     db_uri: {{ include "mongodbUri" . | quote }}
     logger:
-      file: /var/log/open5gs/pcf.log
+      file:
+        path: /var/log/open5gs/pcf.log
     #  level: info   # fatal|error|warn|info(default)|debug|trace
 
     global:

@@ -7,7 +7,8 @@ metadata:
 data:
   ausf.yaml: |
     logger:
-      file: /var/log/open5gs/ausf.log
+      file:
+        path: /var/log/open5gs/ausf.log
     #  level: info   # fatal|error|warn|info(default)|debug|trace
 
     global:

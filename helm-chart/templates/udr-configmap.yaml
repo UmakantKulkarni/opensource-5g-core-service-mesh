@@ -8,7 +8,8 @@ data:
   udr.yaml: |
     db_uri: {{ include "mongodbUri" . | quote }}
     logger:
-      file: /var/log/open5gs/udr.log
+      file:
+        path: /var/log/open5gs/udr.log
     #  level: info   # fatal|error|warn|info(default)|debug|trace
 
     global:

@@ -7,7 +7,8 @@ metadata:
 data:
   udm.yaml: |
     logger:
-      file: /var/log/open5gs/udm.log
+      file:
+        path: /var/log/open5gs/udm.log
     #  level: info   # fatal|error|warn|info(default)|debug|trace
 
     global:
