@@ -1,10 +1,10 @@
 {{- define "mongodbUri" -}}
-{{- if .Values.pcs.enableMongoReplicaSet }}
+{{- if .Values.pcs.enableMongoReplicaSet -}}
 mongodb://{{ .Values.mongodb.username }}:{{ .Values.mongodb.password }}@mongodb-svc/open5gs
-{{- else }}
+{{- else -}}
 mongodb://{{ .Values.mongodb.username }}:{{ .Values.mongodb.password }}@mongodb-svc/open5gs
-{{- end }}
-{{- end }}
+{{- end -}}
+{{- end -}}
 
 {{- if not .Values.pcs.enableMongoReplicaSet }}
 apiVersion: v1
