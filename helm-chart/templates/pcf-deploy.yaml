@@ -60,7 +60,11 @@ spec:
         - name: pcf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
-          command: ["open5gs-pcfd", "-c", "/open5gs/config-map/pcf.yaml"]
+          command: [ "bash", "-c" ]
+          args:
+            - |
+              {{ include "wait-for-paas" . }}
+              open5gs-pcfd -c /open5gs/config-map/pcf.yaml
           env:
           - name: DB_URI
             value: {{ include "mongodbUri" . | quote }}

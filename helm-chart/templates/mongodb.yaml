@@ -6,6 +6,14 @@ mongodb://mongodb-svc/open5gs
 {{- end -}}
 {{- end -}}
 
+{{- define "mongodb-wait" -}}
+while ! mongosh {{ include "mongodbUri" . | quote }} --eval "db.runCommand('ping').ok" --quiet | grep 1; do
+  echo 'Waiting for MongoDB';
+  sleep 5;
+done;
+echo 'MongoDB is ready!';
+{{- end -}}
+
 {{- if not .Values.pcs.enableMongoReplicaSet }}
 apiVersion: v1
 kind: Service
@@ -87,11 +95,11 @@ spec:
               name: metrics
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "100m"
-            limits:
-              memory: "128Mi"
+              memory: "256Mi"
               cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "400m"
 
       volumes:
         - name: mongodb-persistent-storage-{{ .Release.Namespace }}

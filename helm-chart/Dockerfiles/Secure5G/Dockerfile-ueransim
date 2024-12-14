@@ -6,7 +6,7 @@ ENV ENV_TIMEZONE=${ARG_TIMEZONE}
 
 RUN apt -y update
 
-RUN apt-get update && apt-get -yq dist-upgrade && apt-get --no-install-recommends -qqy install wget git vim nano make g++ libsctp-dev lksctp-tools net-tools iproute2 libssl-dev tcpdump curl jq iputils-ping gdb python3-pip tzdata openssh-client cmake
+RUN apt-get update && apt-get -yq dist-upgrade && apt-get --no-install-recommends -qqy install wget git vim nano make g++ libsctp-dev lksctp-tools net-tools iproute2 libssl-dev tcpdump curl jq iputils-ping gdb python3-pip tzdata openssh-client cmake gnupg
 
 ENV TZ="America/Indiana/Indianapolis"
 
@@ -36,5 +36,13 @@ RUN cp UERANSIM/build/nr-* /usr/local/bin/
 RUN echo '$ENV_TIMEZONE' > /etc/timezone \
     && ln -fsn /usr/share/zoneinfo/$ENV_TIMEZONE /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
+
+RUN wget -qO /usr/share/keyrings/mongodb-server-8.0.gpg https://www.mongodb.org/static/pgp/server-8.0.asc && \
+    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list && \
+    apt-get update && \
+    apt-get install -y mongodb-mongosh && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    mongosh --version
 
 CMD ["sh", "-c", "sleep infinity"]
