@@ -92,7 +92,7 @@ spec:
         image: "{{ .Values.webui.image.repository }}:{{ .Values.webui.image.tag }}"
         env:
         - name: DB_URI
-          value: {{ template "mongodbUri" . | quote }}
+          value: {{ include "mongodbUri" . | quote }}
         - name: NODE_ENV
           value: "production"
         - name: HOSTNAME

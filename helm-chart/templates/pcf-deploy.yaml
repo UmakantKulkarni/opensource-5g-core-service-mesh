@@ -63,7 +63,7 @@ spec:
           command: ["open5gs-pcfd", "-c", "/open5gs/config-map/pcf.yaml"]
           env:
           - name: DB_URI
-            value: {{ template "mongodbUri" . | quote }}
+            value: {{ include "mongodbUri" . | quote }}
           volumeMounts:
           - name: open5gs-pcf-config
             mountPath: /open5gs/config-map/pcf.yaml

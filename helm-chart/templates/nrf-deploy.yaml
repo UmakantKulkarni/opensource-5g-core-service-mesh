@@ -65,7 +65,7 @@ spec:
           command: ["open5gs-nrfd", "-c", "/open5gs/config-map/nrf.yaml"]
           env:
           - name: DB_URI
-            value: {{ template "mongodbUri" . | quote }}
+            value: {{ include "mongodbUri" . | quote }}
           volumeMounts:
             - name: open5gs-nrf-config
               mountPath: /open5gs/config-map/nrf.yaml
