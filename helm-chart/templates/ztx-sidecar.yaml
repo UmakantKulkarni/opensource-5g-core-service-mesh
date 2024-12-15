@@ -55,7 +55,7 @@ initContainers:
           sleep 5
         fi
       done
-      "{{ $iptableRule }}"
+      {{ $iptableRule }}
 {{ end }}
 {{- end -}}
 
