@@ -49,7 +49,7 @@ spec:
       serviceAccountName: open5gs
       containers:
         - name: ztx-controller
-          image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.tag }}"
+          image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.controllerTag }}"
           imagePullPolicy: {{ .Values.ztx.image.pullPolicy }}
           securityContext:
             capabilities:
