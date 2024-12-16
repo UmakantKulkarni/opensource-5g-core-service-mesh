@@ -32,6 +32,13 @@ ztx:
   health:
     port: 8080
 
+attack:
+  enabled: false
+  image:
+    repository: umakantk/ueransim
+    pullPolicy: Always
+    tag: "ztx_01"
+
 monitoring:
   prometheus:
     enabled: true
@@ -81,14 +88,15 @@ pcs:
     upf: upf
     ausf: amf
     bsf: amf
-    pcf: amf
+    pcf: smf
     mongo: upf
     nrf: upf
     nssf: upf
-    scp: smf
+    scp: upf
     udr: smf
     udm: smf
-    test: master
+    microservice: amf
+    test: amf
     webui: master
     ztx: master
   enableMongoReplicaSet: false
