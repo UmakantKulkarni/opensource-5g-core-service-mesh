@@ -1,0 +1,149 @@
+amf:
+  mcc: 208
+  mnc: 93
+  tac: 1
+attack:
+  enabled: false
+  hostNetwork: false
+  image:
+    pullPolicy: Always
+    repository: umakantk/ueransim
+    tag: ztx_01
+dnn: internet
+k8s:
+  podInterface: eth0
+max:
+  ue: 2048
+mongodb:
+  image:
+    pullPolicy: IfNotPresent
+    repository: umakantk/open5gs-mongo
+    tag: ztx_02
+  password: root
+  username: root
+monitoring:
+  prometheus:
+    enabled: true
+    nodeport: 30090
+open5gs:
+  gtpv1:
+    port: 2152
+  gtpv2:
+    port: 2153
+  image:
+    pullPolicy: Always
+    repository: umakantk/open5gs
+    tag: benchmark
+  pfcp:
+    port: 8805
+  ran:
+    port: 30412
+  upf:
+    hostNetwork: false
+    tunintf: ogstun
+pcs:
+  blockingApiEnabled:
+    amf:
+      create: true
+      modifyreq: true
+      modifyrsp: true
+      n1n2: true
+    upf:
+      create: true
+      modifyrsp: true
+  dbCollectioname:
+    amf: amf
+    smf: smf
+    upf: upf
+  dbCommEnabled:
+    amf: false
+    smf: false
+    upf: false
+  enableMongoReplicaSet: false
+  enableSingleRead:
+    amf: false
+    smf: false
+    upf: false
+  isProceduralStateless:
+    amf: false
+    smf: false
+    upf: false
+  nodeAffinity:
+    amf: amf
+    ausf: amf
+    bsf: amf
+    enabled: true
+    microservice: amf
+    mongo: upf
+    nrf: upf
+    nssf: upf
+    pcf: smf
+    scp: upf
+    smf: smf
+    test: amf
+    udm: smf
+    udr: smf
+    upf: upf
+    webui: master
+    ztx: master
+  replaceApiEnabled:
+    amf:
+      modify: false
+      n1n2: false
+    smf:
+      modify: false
+      n1n2: false
+    upf:
+      modify: false
+  updateApiEnabled:
+    amf:
+      modify: true
+      n1n2: true
+    smf:
+      modify: true
+      n1n2: true
+    upf:
+      modify: true
+  upsertApiEnabled:
+    amf:
+      create: false
+    smf:
+      create: false
+    upf:
+      create: false
+pool:
+  key: 128
+  val: 65536
+ueransim:
+  image:
+    pullPolicy: Always
+    repository: umakantk/ueransim
+    tag: ztx_01
+webui:
+  image:
+    pullPolicy: Always
+    repository: registry.gitlab.com/infinitydon/registry/open5gs-webui
+    tag: v2.2.2
+  ingress:
+    enabled: false
+    hosts:
+    - name: open5gs-epc.local
+      paths:
+      - /
+      tls: false
+ztx:
+  authentication: true
+  enabled: false
+  encryption: true
+  health:
+    port: 8080
+  image:
+    controllerTag: v2
+    initTag: init
+    pullPolicy: Always
+    repository: umakantk/ztx
+    tag: v1
+  name: ztx
+  sctp: true
+  tcp: true
+  udp: true

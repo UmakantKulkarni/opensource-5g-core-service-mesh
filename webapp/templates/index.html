@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helm Values Editor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #101010;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .form-control {
+            border-radius: 6px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        button {
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        button.btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button.btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        button.btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button.btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        button.btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button.btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+
+        #formContainer {
+            margin-top: 30px;
+        }
+
+        .array-entry {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="d-flex align-items-center justify-content-center">
+            <img src="/static/logo.png" alt="Logo" class="me-3" style="height: 50px;">
+            Open5GS-ZTX 5G Core Deployment
+            <img src="/static/logo.png" alt="Logo" class="ms-3" style="height: 50px;">
+        </h1>
+        <!-- Helm-specific inputs -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title">Helm Configuration</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="helmNamespace" class="form-label">Namespace</label>
+                    <input type="text" id="helmNamespace" class="form-control" value="default">
+                </div>
+                <div class="mb-3">
+                    <label for="helmReleaseName" class="form-label">Release Name</label>
+                    <input type="text" id="helmReleaseName" class="form-control" value="5gcore">
+                </div>
+                <div class="mb-3">
+                    <label for="helmChartPath" class="form-label">Helm Chart Path</label>
+                    <input type="text" id="helmChartPath" class="form-control"
+                        value="/opt/opensource-5g-core/helm-chart">
+                </div>
+                <div class="mb-3">
+                    <label for="kubectlConfigPath" class="form-label">Kubectl Config Path</label>
+                    <input type="text" id="kubectlConfigPath" class="form-control" value="/etc/kubernetes/admin.conf">
+                </div>
+            </div>
+        </div>
+        <!-- YAML values form -->
+        <div id="formContainer"></div>
+        <button class="btn btn-primary btn-lg w-100 mt-3" onclick="deploy()">Deploy</button>
+    </div>
+    <footer class="footer">
+        &copy; 2024 ZTX. All rights reserved.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const values = {{ values| tojson }};
+        const templates = {{ templates| tojson }};
+        const formContainer = document.getElementById("formContainer");
+
+        function generateForm(obj, parent = formContainer, keyPath = "") {
+            for (const [key, value] of Object.entries(obj)) {
+                const card = document.createElement("div");
+                card.className = "card mb-3";
+
+                const cardHeader = document.createElement("div");
+                cardHeader.className = "card-header";
+
+                const cardTitle = document.createElement("h5");
+                cardTitle.className = "card-title";
+                cardTitle.textContent = key;
+
+                cardHeader.appendChild(cardTitle);
+
+                const cardBody = document.createElement("div");
+                cardBody.className = "card-body";
+
+                if (Array.isArray(value)) {
+                    const arrayContainer = document.createElement("div");
+                    value.forEach((item, index) => {
+                        renderArrayEntry(arrayContainer, value, item, index, `${keyPath}${key}`);
+                    });
+
+                    const addButton = document.createElement("button");
+                    addButton.className = "btn btn-success btn-sm mt-2";
+                    addButton.textContent = "+ Add Entry";
+                    addButton.onclick = (e) => {
+                        e.preventDefault();
+                        const template = templates[`${keyPath}${key}`] || {};
+                        const newItem = JSON.parse(JSON.stringify(template));
+                        value.push(newItem);
+                        renderArrayEntry(arrayContainer, value, newItem, value.length - 1, `${keyPath}${key}`);
+                    };
+
+                    cardBody.appendChild(arrayContainer);
+                    cardBody.appendChild(addButton);
+                } else if (typeof value === "boolean") {
+                    const input = document.createElement("input");
+                    input.type = "checkbox";
+                    input.className = "form-check-input";
+                    input.checked = value;
+                    input.onchange = () => (obj[key] = input.checked);
+                    cardBody.appendChild(input);
+                } else if (typeof value === "number" || typeof value === "string") {
+                    const input = document.createElement("input");
+                    input.type = typeof value === "number" ? "number" : "text";
+                    input.className = "form-control mt-2";
+                    input.value = value;
+                    input.oninput = () => (obj[key] = input.value);
+                    cardBody.appendChild(input);
+                } else if (typeof value === "object") {
+                    const nestedDiv = document.createElement("div");
+                    nestedDiv.className = "ms-3";
+                    generateForm(value, nestedDiv, `${keyPath}${key}.`);
+                    cardBody.appendChild(nestedDiv);
+                }
+
+                card.appendChild(cardHeader);
+                card.appendChild(cardBody);
+                parent.appendChild(card);
+            }
+        }
+
+        function renderArrayEntry(container, array, item, index, keyPath) {
+            const entryDiv = document.createElement("div");
+            entryDiv.className = "array-entry";
+
+            if (typeof item === "object" && item !== null) {
+                generateForm(item, entryDiv, `${keyPath}[${index}]`);
+            } else {
+                const input = document.createElement("input");
+                input.className = "form-control";
+                input.value = item;
+                input.oninput = () => array[index] = input.value;
+                entryDiv.appendChild(input);
+            }
+
+            const removeButton = document.createElement("button");
+            removeButton.textContent = "Remove";
+            removeButton.className = "btn btn-danger btn-sm remove-btn";
+            removeButton.onclick = (e) => {
+                e.preventDefault();
+                array.splice(index, 1);
+                container.removeChild(entryDiv);
+            };
+
+            entryDiv.appendChild(removeButton);
+            container.appendChild(entryDiv);
+        }
+
+        generateForm(values);
+
+        async function deploy() {
+            const namespace = document.getElementById("helmNamespace").value;
+            const releaseName = document.getElementById("helmReleaseName").value;
+            const helmChartPath = document.getElementById("helmChartPath").value;
+            const kubectlConfigPath = document.getElementById("kubectlConfigPath").value;
+
+            fetch("/update", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ...values,
+                    helmNamespace: namespace,
+                    helmReleaseName: releaseName,
+                    helmChartPath: helmChartPath,
+                    kubectlConfigPath: kubectlConfigPath,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "exists") {
+                        if (confirm(data.message)) {
+                            fetch("/upgrade", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    ...values,
+                                    helmNamespace: namespace,
+                                    helmReleaseName: releaseName,
+                                    helmChartPath: helmChartPath,
+                                    kubectlConfigPath: kubectlConfigPath,
+                                }),
+                            })
+                                .then(upgradeResponse => upgradeResponse.json())
+                                .then(upgradeData => alert(upgradeData.output));
+                        } else {
+                            alert("Operation aborted.");
+                        }
+                    } else {
+                        alert(data.output);
+                    }
+                });
+        }
+    </script>
+</body>
+
+</html>
