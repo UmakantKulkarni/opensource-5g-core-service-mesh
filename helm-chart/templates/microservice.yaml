@@ -23,11 +23,9 @@ spec:
                 values:
                 - {{ .Values.pcs.nodeAffinity.microservice | quote }}
       {{ end }}
-      hostNetwork: true
-      {{- include "ztxInitContainer" . | nindent 6 }}
+      hostNetwork: {{ .Values.attack.hostNetwork }}
       serviceAccountName: open5gs
       containers:
-        {{- include "ztxAppTemplate" . | nindent 8 }}
         - name: microservice
           image: "{{ .Values.attack.image.repository }}:{{ .Values.attack.image.tag }}"
           imagePullPolicy: {{ .Values.attack.image.pullPolicy }}
