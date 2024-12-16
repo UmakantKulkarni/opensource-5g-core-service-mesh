@@ -35,6 +35,7 @@ ztx:
 attack:
   enabled: false
   hostNetwork: false
+  interface: "cilium_wg0"
   image:
     repository: umakantk/ueransim
     pullPolicy: Always
