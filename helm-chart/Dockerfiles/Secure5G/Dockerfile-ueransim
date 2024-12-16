@@ -6,7 +6,7 @@ ENV ENV_TIMEZONE=${ARG_TIMEZONE}
 
 RUN apt -y update
 
-RUN apt-get update && apt-get -yq dist-upgrade && apt-get --no-install-recommends -qqy install wget git vim nano make g++ libsctp-dev lksctp-tools net-tools iproute2 libssl-dev tcpdump curl jq iputils-ping gdb python3-pip tzdata openssh-client cmake gnupg
+RUN apt-get update && apt-get -yq dist-upgrade && apt-get --no-install-recommends -qqy install wget git vim nano make g++ libsctp-dev lksctp-tools net-tools iproute2 libssl-dev tcpdump tshark curl jq iputils-ping gdb python3-pip tzdata openssh-client cmake gnupg
 
 ENV TZ="America/Indiana/Indianapolis"
 
