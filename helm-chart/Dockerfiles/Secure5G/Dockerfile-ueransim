@@ -10,11 +10,11 @@ RUN apt-get update && apt-get -yq dist-upgrade && apt-get --no-install-recommend
 
 ENV TZ="America/Indiana/Indianapolis"
 
-RUN pip3 install pymongo
+RUN pip3 install pymongo scapy
 
 RUN cmake --version
 
-ENV PCS_SETUP_TUN_INTF=false
+ENV PCS_SETUP_TUN_INTF=true
 
 RUN cd && git clone -b ztx_01 https://github.com/UmakantKulkarni/UERANSIM && cd UERANSIM && make
 
