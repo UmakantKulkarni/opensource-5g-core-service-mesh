@@ -31,7 +31,7 @@ spec:
         - name: microservice
           image: "{{ .Values.attack.image.repository }}:{{ .Values.attack.image.tag }}"
           imagePullPolicy: {{ .Values.attack.image.pullPolicy }}
-          command: [ "python3", "/root/5GUnSec/ciliumAttack.py", "{{ .Values.attack.enabled }}"]
+          command: [ "python3", "/root/5GUnSec/ciliumAttack.py", "cilium_wg0" , "{{ .Values.attack.enabled }}"]
           env:
             - name: DB_URI
               {{ if .Values.pcs.enableMongoReplicaSet }}

@@ -28,7 +28,7 @@ RUN cd
 
 WORKDIR /root/
 
-RUN git clone -b ztx_cl https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x *
+RUN git clone -b ztx_cl https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x * 
 
 RUN git clone https://github.com/UmakantKulkarni/5GUnSec && cd 5GUnSec && chmod +x *
 
