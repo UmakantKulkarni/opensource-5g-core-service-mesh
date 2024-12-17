@@ -2,6 +2,7 @@
 
 import os
 import yaml
+import argparse
 import subprocess
 from flask import Flask, request, jsonify, render_template
 
@@ -171,4 +172,9 @@ def upgrade_release():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001)
+    parser = argparse.ArgumentParser(
+        __doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--server_ip', '-s', default="0.0.0.0")
+    parser.add_argument('--server_port', '-p', default=15001)
+    args = parser.parse_args()
+    app.run(host=args.server_ip, port=args.server_port)
