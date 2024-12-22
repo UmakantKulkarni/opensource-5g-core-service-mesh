@@ -11,7 +11,7 @@ metadata:
   name: service-and-endpoint-reader
 rules:
 - apiGroups: [""]
-  resources: ["endpoints", "services"]
+  resources: ["endpoints", "services", "pods"]
   verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
