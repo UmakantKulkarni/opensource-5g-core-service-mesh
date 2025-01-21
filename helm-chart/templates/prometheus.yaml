@@ -100,6 +100,11 @@ kind: Service
 metadata:
   name: prometheus
   namespace: {{ .Release.Namespace }}
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-manage-backend-security-group-rules: "true"
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "60"
+    service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: "environment=dev,owner=team"
+    service.beta.kubernetes.io/aws-load-balancer-cleanup-on-delete: "true" 
 spec:
   type: LoadBalancer
   selector:

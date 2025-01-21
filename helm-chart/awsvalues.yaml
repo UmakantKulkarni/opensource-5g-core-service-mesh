@@ -83,7 +83,7 @@ webui:
 
 pcs:
   nodeAffinity:
-    enabled: true
+    enabled: false
     amf: amf
     smf: smf
     upf: upf
